@@ -2,6 +2,6 @@
 #define TESTSCANNER_H
 
 // testScanner driver function 
-void testScanner (FILE *infile);
+void testScanner (FILE *inputFile);
 
 #endif 

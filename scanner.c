@@ -8,12 +8,14 @@
 #include "scanner.h"
 #include "token.h"
 
-token scanner(FILE *infile, int *line);
+token scanner(FILE *inputFile, int *line);
 token lookup(int state, char *str);
 int findColumn(int currentCharacter);
 
+const int FSACOLUMNS = 24;
+const int FSAROWS = 23;
 
-int FSA[27][24] = {
+int FSA[FSAROWS][FSACOLUMNS] = {
 	    //  ws   a-z   0-9    =     <     >     :     +     -     *     /     &     #     .    (      )     ,    {     }      ;    [      ]    EOF  A-Z
 /*s0*/	{   0,    1,    2,    3,    4,    5,    6,    7,    8,   9,   10,   11,   12,   13,   14,   15,   16,  17,    18,   19,   20,   21,   -1,   -2},
 /*s1*/	{1000,    1,    1, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000,   1},
@@ -92,7 +94,7 @@ token keywordLookup[] = {
 };
 
 // This is the main scanner function
-token scanner(FILE *infile, int *line) {
+token scanner(FILE *inputFile, int *line) {
 	token returnToken;
 
 	int currentCharacter;
@@ -104,22 +106,22 @@ token scanner(FILE *infile, int *line) {
 	char *currentCharacterStr = malloc(2);
 
 	// default token values
-	returnToken.id = 999;
 	returnToken.tkString = NULL;
+	returnToken.id = 999;
 	returnToken.line = 999;
 
 	//read from file
 	while (currState > -1 && currState < 500){
 
-		currentCharacter = fgetc(infile);
+		currentCharacter = fgetc(inputFile);
 
 		// skip comments
 		if (currentCharacter == '%') {
 			do {
-				currentCharacter = fgetc(infile);
+				currentCharacter = fgetc(inputFile);
 			} while (currentCharacter != '%');
 			// skip the next % too
-			currentCharacter = fgetc(infile);
+			currentCharacter = fgetc(inputFile);
 		}
 			
 		column = findColumn(currentCharacter);
@@ -151,12 +153,12 @@ token scanner(FILE *infile, int *line) {
 			else if (nextState > 999) {
 				returnToken = lookup(nextState, currWord);
 				returnToken.line = *line;
-				ungetc(currentCharacter, infile);
+				ungetc(currentCharacter, inputFile);
 				return returnToken;
 			} else {
 				// Handle errors
-				ungetc(currentCharacter, infile);
-				int temp = fgetc(infile);
+				ungetc(currentCharacter, inputFile);
+				int temp = fgetc(inputFile);
 				sprintf(currentCharacterStr, "%c", temp);
 				strcat(currWord, currentCharacterStr);
 				printf("\nScanner Error: Line: %i. Invalid Character: %c.\n", *line, currentCharacter);
@@ -178,6 +180,7 @@ token scanner(FILE *infile, int *line) {
 				return returnToken;
 			}
 			if (currentCharacter == '\n'){
+				// increment line count
 				(*line)++;
 			}
 			currState = nextState;

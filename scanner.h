@@ -9,6 +9,9 @@
 #define TOKENS 27
 #define KEYWORDS 12
 
+token scanner(FILE *inputFile, int *line);
+token lookup(int state, char *str);
+int findColumn(int currentChar);
 
 typedef struct characterLookup{
 	int input;
@@ -19,10 +22,5 @@ typedef struct stateLookup{
 	int state;
 	token_ID tkEnum;
 }stateMap;
-
-token scanner(FILE *infile, int *line);
-token lookup(int state, char *str);
-int findColumn(int currentChar);
-
 
 #endif 
