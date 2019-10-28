@@ -1,0 +1,18 @@
+Option #2 FSA Table + driver
+The FSA Table is stored in scanner.c
+
+Mohammed Bilal Ather
+Project 1
+Dr. Climer
+CS4280
+
+To compile: 
+    use the command "make" 
+
+To clean (Remove all executables):
+    use the command "make clean"
+
+To run:
+    1. From file use "./scanner < FILENAME" or "./scanner FILENAME"
+    2. From keyboard input use "./scanner"
+
