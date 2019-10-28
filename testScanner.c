@@ -1,4 +1,5 @@
 // File testScanner.c
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,9 +8,10 @@
 #include "scanner.h"
 #include "testScanner.h"
 
+#define TOKENNAMESIZE 36
+
 void testScanner (FILE *input);
 
-const int TOKENNAMESIZE = 36;
 // List of token names (for printing)
 char *tokenNames[TOKENNAMESIZE] = {
 	"End of File",

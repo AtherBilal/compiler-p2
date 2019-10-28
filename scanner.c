@@ -8,12 +8,14 @@
 #include "scanner.h"
 #include "token.h"
 
+#define FSACOLUMNS 24
+#define FSAROWS 23
+
 token scanner(FILE *inputFile, int *line);
 token lookup(int state, char *str);
 int findColumn(int currentCharacter);
 
-const int FSACOLUMNS = 24;
-const int FSAROWS = 23;
+
 
 int FSA[FSAROWS][FSACOLUMNS] = {
 	    //  ws   a-z   0-9    =     <     >     :     +     -     *     /     &     #     .    (      )     ,    {     }      ;    [      ]    EOF  A-Z
